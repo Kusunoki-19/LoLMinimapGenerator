@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja" ng-app="mapGeneApp">
+<head>
+    <meta charset="UTF-8">
+    <title>lolミニマップジェネレーター</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="LMMGmap.css">
+    <script src="angular.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script src="script.js"></script>
+    <script src="controllers.js"></script>
+</head>
+
+<body ng-controller="iconListController as iconList">
+<header>
+    <hgroup id="headergroup">
+        <h1><b>LMMG</b>--LoLミニマップジェネレーターver1.0</h1>
+        <button id="browser" onclick="OKbrowser()">対応ブラウザ</button>
+        <button id="explain" onclick="explainApp()">説明書</button>
+    </hgroup>
+</header>
+<main>
+
+    <section id="view">
+        <div id="map-container">
+            <div id="LMMG-map-frame">
+                <img id="LMMG-map" src="summonersrlift.jpg"
+                     style="top: -534px; left: -729px; z-index: 0; transform: scale(0.6);">
+                <img ng-repeat="icon in iconList.icons" class="LMMG-icons LMMG-{{icon.team}}"
+                     src="champion/{{icon.champ}}.png"
+                     style="top: 0px;left: 0px;">
+                <a id="LMMG-sponsor" href="http://ishikawaweb.xsrv.jp/kit-e-sports/LMMG/">powerd by LMMG</a>
+            </div>
+        </div>
+        <div id="map-ctrl">
+            <button id="view-zoomin" onclick="mapScaleUp()">＋</button>
+            <br>
+            <button id="view-zoomout" onclick="mapScaleDown()">－</button>
+            <br>
+            <button onclick="outputCode()">↓</button>
+            <br>
+        </div>
+    </section>
+
+    <section id="data">
+        <h2>アイコン追加・編集</h2>
+        <table>
+            <tr>
+                <form ng-submit="iconList.addToIcon()">
+                    <td>
+                        <!--champion keyの取得-->
+                        <select id="champ-select" ng-model="iconList.iconData"
+                                ng-options="champ.key as champ.name for champ in iconList.champ | orderBy:'name'"></select>
+                    </td>
+                    <td>
+                        <!--Blue team || Red team-->
+                        <label>
+                            <input type="radio" name="team1" ng-model="iconList.teamData" value="Blue"
+                                   checked="checked"><span>BlueTeam</span>
+                        </label><br>
+                        <label>
+                            <input type="radio" name="team" ng-model="iconList.teamData"
+                                   value="Red"><span>RedTeam</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label><input type="submit" value="add" style="display:none">add</label>
+                    </td>
+                </form>
+
+            </tr>
+            <tr ng-repeat="icon in iconList.icons">
+                <td>{{icon.champ}}</td>
+                <td>{{icon.team}}Team</td>
+                <td><label><input type="checkbox" ng-model="icon.del" ng-click="iconList.delete()"
+                                  style="display:none">delete</label></td>
+            </tr>
+        </table>
+    </section>
+
+    <section id="script">
+        コード出力部分
+        <hr>
+        <div id="map-code">
+        </div>
+    </section>
+    <section id="advertisement">
+        スポンサードリンク
+        <div id="advertisement-container">
+        </div>
+    </section>
+</main>
+
+<footer></footer>
+</body>
+</html>
